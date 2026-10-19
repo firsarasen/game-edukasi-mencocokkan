@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Belajar Sambil Main — Game Edukasi Anak SD</title>
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ================= NAMA PEMAIN ================= -->
+<div id="layar-nama" class="layar aktif">
+  <h1>🎮 Belajar Sambil Main</h1>
+  <p class="sub">Kenalan dulu yuk! Siapa namamu?</p>
+  <input id="input-nama" maxlength="20" placeholder="Tulis namamu di sini..." autocomplete="off">
+  <button class="btn" id="btn-mulai" style="font-size:18px;padding:14px 34px;">Mulai Main ▶️</button>
+</div>
+
+<!-- ================= BERANDA ================= -->
+<div id="beranda" class="layar">
+  <h1>🎮 Belajar Sambil Main</h1>
+  <p class="sub">Halo, <b id="halo-nama">Pemain</b>! Pilih permainan seru di bawah ini!</p>
+  <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;justify-content:center;">
+    <button class="btn biru" id="btn-peringkat">🏆 Peringkat</button>
+    <button class="btn abu" id="btn-ganti-nama">👤 Ganti Nama</button>
+  </div>
+  <div class="menu-grid">
+    <button class="menu-btn m-peta"   data-mode="peta"><span class="ikon">🗺️</span>Peta 38 Provinsi<span class="terbaik" data-terbaik="peta"></span></button>
+    <button class="menu-btn m-hewan"  data-mode="hewan"><span class="ikon">🐾</span>Hewan<span class="terbaik" data-terbaik="hewan"></span></button>
+    <button class="menu-btn m-buah"   data-mode="buah"><span class="ikon">🍎</span>Buah-buahan<span class="terbaik" data-terbaik="buah"></span></button>
+    <button class="menu-btn m-benda"  data-mode="benda"><span class="ikon">🧸</span>Benda-benda<span class="terbaik" data-terbaik="benda"></span></button>
+    <button class="menu-btn m-warna"  data-mode="warna"><span class="ikon">🎨</span>Warna<span class="terbaik" data-terbaik="warna"></span></button>
+    <button class="menu-btn m-angka"  data-mode="angka"><span class="ikon">🔢</span>Angka<span class="terbaik" data-terbaik="angka"></span></button>
+  </div>
+  <p class="kredit">Data peta: denyherianto/indonesia-geojson-topojson-maps-with-38-provinces (CC-BY-4.0)</p>
+</div>
+
+<!-- ================= MODE PETA ================= -->
+<div id="layar-peta" class="layar">
+  <div class="bilah">
+    <button class="btn abu" data-kembali>◀</button>
+    <h2>🗺️ Susun Peta Indonesia</h2>
+    <span class="skor-pill">⭐ <b id="skor-peta">0</b></span>
+    <span class="skor-pill">🧩 <b id="prog-peta">0/38</b></span>
+  </div>
+  <div style="display:flex;gap:10px;margin-bottom:6px;flex-wrap:wrap;justify-content:center;">
+    <button class="btn" id="btn-petunjuk-peta">💡 Petunjuk (−10)</button>
+    <button class="btn hijau" id="btn-acak-peta">🔀 Acak Lagi</button>
+  </div>
+  <div id="pesan-peta" style="min-height:28px;margin:2px 10px;font-size:16px;font-weight:bold;color:#0b5fa5;text-align:center;">Seret kepingan provinsi ke tempat yang benar ya! 👆</div>
+  <svg id="peta-svg" viewBox="0 0 1000 540">
+    <g id="lapis-target"></g>
+    <g id="lapis-terpasang"></g>
+  </svg>
+  <div class="info-fakta" id="fakta-peta"></div>
+  <div id="nampan"></div>
+</div>
+
+<!-- ================= MODE COCOK ================= -->
+<div id="layar-cocok" class="layar">
+  <div class="bilah">
+    <button class="btn abu" data-kembali>◀</button>
+    <h2 id="judul-cocok">🐾</h2>
+    <span class="skor-pill">⭐ <b id="skor-cocok">0</b></span>
+  </div>
+  <div id="pesan-cocok" style="min-height:28px;margin:2px 10px;font-size:16px;font-weight:bold;color:#0b5fa5;text-align:center;">Seret gambar ke nama yang cocok! 👆</div>
+  <div class="arena-cocok">
+    <div class="kolom"><h3>🖼️ Gambar</h3><div class="kolom" id="kolom-emoji" style="max-width:none;"></div></div>
+    <div class="kolom"><h3>🔤 Nama</h3><div class="kolom" id="kolom-nama" style="max-width:none;"></div></div>
+  </div>
+</div>
+
+<!-- ================= PERINGKAT ================= -->
+<div id="layar-peringkat" class="layar">
+  <div class="bilah">
+    <button class="btn abu" data-kembali>◀</button>
+    <h2>🏆 Peringkat</h2>
+  </div>
+  <div class="tab-mode">
+    <button class="tab-btn aktif" data-tab="semua">🌟 Semua</button>
+    <button class="tab-btn" data-tab="peta">🗺️</button>
+    <button class="tab-btn" data-tab="hewan">🐾</button>
+    <button class="tab-btn" data-tab="buah">🍎</button>
+    <button class="tab-btn" data-tab="benda">🧸</button>
+    <button class="tab-btn" data-tab="warna">🎨</button>
+    <button class="tab-btn" data-tab="angka">🔢</button>
+  </div>
+  <ol id="daftar-peringkat"></ol>
+</div>
+
+<!-- ================= MENANG ================= -->
+<div id="menang">
+  <div class="kartu-menang">
+    <h2 id="menang-judul">🎉 HEBAT! 🎉</h2>
+    <p id="menang-teks"></p>
+    <div class="tombol-row" id="menang-tombol"></div>
+  </div>
+</div>
+
+<script src="js/data-provinsi.js"></script>
+<script src="js/data-cocok.js"></script>
+<script src="js/util.js"></script>
+<script src="js/drag.js"></script>
+<script src="js/mode-peta.js"></script>
+<script src="js/mode-cocok.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
